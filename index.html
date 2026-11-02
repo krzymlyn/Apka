@@ -88,6 +88,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            width: 100%;
         }
 
         .card-header {
@@ -124,10 +125,10 @@
 
         /* Obsługa zwijania kart */
         .card.collapsed .card-content {
-            display: none;
+            display: none !important;
         }
         .card.collapsed {
-            padding-bottom: 20px;
+            padding-bottom: 20px !important;
         }
 
         .toggle-arrow {
@@ -572,151 +573,4 @@
                         </div>
                     </div>`;
                 });
-                document.getElementById('dates-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak propozycji...</div>';
-            });
-
-            // Prośby
-            window.addRequest = function() {
-                const text = document.getElementById('request-text').value;
-                if(!text) return;
-                addDoc(collection(db, "requests"), { text, checked: false, timestamp: Date.now() });
-                document.getElementById('request-text').value = '';
-            }
-
-            onSnapshot(collection(db, "requests"), (snapshot) => {
-                let html = "";
-                snapshot.forEach((docSnap) => {
-                    let d = docSnap.data();
-                    html += `<div class="list-item ${d.checked ? 'checked' : ''}">
-                        <label style="cursor:pointer;"><input type="checkbox" ${d.checked ? 'checked' : ''} onclick="toggleCheck('requests', '${docSnap.id}', ${!d.checked})"> <span>${d.text}</span></label>
-                        <button class="delete-btn" onclick="removeItem('requests', '${docSnap.id}')">🗑️</button>
-                    </div>`;
-                });
-                document.getElementById('requests-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>';
-            });
-
-            // Filmy
-            window.addMovie = function() {
-                const title = document.getElementById('movie-title').value;
-                if(!title) return;
-                addDoc(collection(db, "movies"), { title, checked: false, timestamp: Date.now() });
-                document.getElementById('movie-title').value = '';
-            }
-
-            onSnapshot(collection(db, "movies"), (snapshot) => {
-                let html = "";
-                snapshot.forEach((docSnap) => {
-                    let d = docSnap.data();
-                    html += `<div class="list-item ${d.checked ? 'checked' : ''}">
-                        <label style="cursor:pointer;"><input type="checkbox" ${d.checked ? 'checked' : ''} onclick="toggleCheck('movies', '${docSnap.id}', ${!d.checked})"> <span>${d.title}</span></label>
-                        <button class="delete-btn" onclick="removeItem('movies', '${docSnap.id}')">🗑️</button>
-                    </div>`;
-                });
-                document.getElementById('movies-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak filmów...</div>';
-            });
-
-            // Słoik wspomnień
-            window.addMemory = function() {
-                const text = document.getElementById('memory-text').value;
-                if(!text) return;
-                addDoc(collection(db, "memories"), { text, timestamp: Date.now() });
-                document.getElementById('memory-text').value = '';
-            }
-
-            onSnapshot(collection(db, "memories"), (snapshot) => {
-                let html = "";
-                snapshot.forEach((docSnap) => {
-                    let d = docSnap.data();
-                    html += `<div class="list-item"><span>💌 ${d.text}</span> <button class="delete-btn" onclick="removeItem('memories', '${docSnap.id}')">🗑️</button></div>`;
-                });
-                document.getElementById('memories-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Słoik jest pusty...</div>';
-            });
-
-            // Spotify obsługa dynamiczna
-            window.updateSpotifySong = function() {
-                const inputVal = document.getElementById('spotify-link-input').value;
-                let trackId = "4cOdK2wGLETKBW3PvgPWqT"; // domyślny utwór zapasowy
-                
-                // Wyciąganie ID utworu ze zwykłego linku Spotify np. https://open.spotify.com/track/TUTAJ_ID?si=...
-                const match = inputVal.match(/track\/([a-zA-Z0-9]+)/);
-                if (match && match[1]) {
-                    trackId = match[1];
-                }
-
-                setDoc(doc(db, "settings", "spotify"), { trackId }, { merge: true });
-                document.getElementById('spotify-link-input').value = '';
-            }
-
-            onSnapshot(doc(db, "settings", "spotify"), (docSnap) => {
-                let trackId = "4cOdK2wGLETKBW3PvgPWqT";
-                if (docSnap.exists() && docSnap.data().trackId) {
-                    trackId = docSnap.data().trackId;
-                }
-                document.getElementById('spotify-iframe').src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`;
-            });
-
-            // Kalendarz Adwentowy - logika
-            const adventSurprises = {
-                1: "Dziś czeka na Ciebie gorąca czekolada i buziak! ☕",
-                2: "Wspólny wybór filmu na wieczór i przytulaski 🎬",
-                3: "Mała słodka niespodzianka w kieszeni kurtki 🍫",
-                4: "Wieczór bez telefonów – tylko my i rozmowy ✨",
-                5: "Krzysiu/Jusia stawia dziś ulubioną kawę! ☕",
-                6: "Mikołajkowe podarunki i mnóstwo miłości ❤️",
-                7: "Masz prawo do jednego zwolnienia z domowego obowiązku! 👑",
-                8: "Wspólne planowanie zimowego wypadu ❄️",
-                9: "Długie, niedzielne przytulanie bez limitu 🥰",
-                10: "Masaż pleców wieczorem na rozluźnienie 💆‍♀️",
-                11: "Słodkie liściki ukryte w różnych miejscach 💌",
-                12: "Jesteśmy już w połowie drogi do Świąt! Oglądamy świąteczne komedie 🎄",
-                13: "Dziś Ty wybierasz obiad lub deser! 🥞",
-                14: "Romantyczny spacer w zimowej scenerii ❄️",
-                15: "Gorąca kąpiel i relaks przy świecach 🕯️",
-                16: "Wspólne pieczenie pierniczków lub ciasteczek 🍪",
-                17: "Wieczorne opowiadanie najlepszych wspomnień 🌟",
-                18: "Mały upominek od serca 🎁",
-                19: "Zrobienie ulubionej herbaty drugiej połówce 🫖",
-                20: "Słuchanie świątecznych piosenek i leniuchowanie 🎶",
-                21: "Zimowy wieczór pod kocem z filmem 🧸",
-                22: "Ostatnie przygotowania i ekscytacja przedświąteczna ✨",
-                23: "Magiczny czas tuż przed Wigilią 🎄",
-                24: "Wesołych Świąt! Najpiękniejszy prezent to my razem ❤️"
-            };
-
-            const grid = document.getElementById('advent-grid');
-            let adventHtml = "";
-            for(let i=1; i<=24; i++) {
-                adventHtml += `<div class="advent-box" onclick="openAdvent(${i})">${i}</div>`;
-            }
-            grid.innerHTML = adventHtml;
-
-            window.openAdvent = function(day) {
-                const now = new Date();
-                const currentMonth = now.getMonth() + 1;
-                const currentDay = now.getDate();
-
-                if (currentMonth < 12) {
-                    alert("Cierpliwości! Kalendarz adwentowy otworzy się dopiero 1 grudnia! 🎄");
-                    return;
-                }
-                if (currentMonth === 12 && currentDay < day) {
-                    alert(`Na dzień ${day} grudnia musisz jeszcze chwilę poczekać! ⏳`);
-                    return;
-                }
-
-                const msg = adventSurprises[day] || "Wspaniałego dnia pełnego miłości! ❤️";
-                alert(`Okienko nr ${day}:\n\n${msg}`);
-            }
-
-            // Funkcje pomocnicze
-            window.removeItem = function(coll, id) {
-                deleteDoc(doc(db, coll, id));
-            }
-
-            window.toggleCheck = function(coll, id, val) {
-                updateDoc(doc(db, coll, id), { checked: val });
-            }
-        }
-    </script>
-</body>
-</html>
+                document.getElementById('dates-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #
