@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NaBiezaco</title>
+    <title>Nasz Słodki Kącik</title>
     <!-- Czcionki vintage -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -61,7 +61,6 @@
             margin: 0 auto;
         }
 
-        /* Układ siatki jak na zdjęciu */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -124,7 +123,6 @@
             background-color: #6f3724;
         }
 
-        /* Podział nastrojów na dwie kolumny */
         .moods-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -162,6 +160,13 @@
             margin: 10px 0 5px 0;
         }
 
+        .list-container {
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 4px;
+        }
+
         .list-item {
             display: flex;
             justify-content: space-between;
@@ -187,6 +192,39 @@
             padding: 0 4px;
         }
 
+        /* Kalendarz adwentowy siatka */
+        .advent-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .advent-box {
+            background: var(--accent-light);
+            border: 1px solid var(--border-color);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .advent-box:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .advent-box.opened {
+            background: #e3d7cb;
+            color: #777;
+            text-decoration: line-through;
+        }
+
         .spotify-full {
             grid-column: 1 / -1;
             text-align: center;
@@ -198,7 +236,7 @@
     <div class="container">
         <div class="dashboard-grid">
             
-            <!-- 1. Nastroje (Rozdzielone na Jusia i Krzyś) -->
+            <!-- 1. Nastroje -->
             <div class="card">
                 <h2>🎭 Nastroje</h2>
                 <div class="moods-container">
@@ -229,8 +267,8 @@
             <div class="card">
                 <h2>✍️ Skrzynka Skarg</h2>
                 <div>
-                    <div id="complaints-list" style="margin-bottom: 15px; max-height: 180px; overflow-y: auto;">
-                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;" id="no-complaints">Brak pism.</div>
+                    <div id="complaints-list" class="list-container">
+                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak pism.</div>
                     </div>
                 </div>
                 <div>
@@ -243,8 +281,8 @@
             <div class="card">
                 <h2>💌 Propozycje Randek</h2>
                 <div>
-                    <div id="dates-list" style="margin-bottom: 15px; max-height: 160px; overflow-y: auto;">
-                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;" id="no-dates">Brak propozycji...</div>
+                    <div id="dates-list" class="list-container">
+                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak propozycji...</div>
                     </div>
                 </div>
                 <div>
@@ -258,8 +296,8 @@
             <div class="card">
                 <h2>❤️ Drobne Prośby</h2>
                 <div>
-                    <div id="requests-list" style="margin-bottom: 15px; max-height: 180px; overflow-y: auto;">
-                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;" id="no-requests">Pusto...</div>
+                    <div id="requests-list" class="list-container">
+                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>
                     </div>
                 </div>
                 <div>
@@ -272,7 +310,7 @@
             <div class="card">
                 <h2>✨ Życzenia Jusii</h2>
                 <div>
-                    <div id="list-wish-jusia" style="margin-bottom: 15px; max-height: 180px; overflow-y: auto;"></div>
+                    <div id="list-wish-jusia" class="list-container"></div>
                 </div>
                 <div>
                     <input type="text" id="wish-jusia" placeholder="Dodaj marzenie lub link...">
@@ -284,7 +322,7 @@
             <div class="card">
                 <h2>✨ Życzenia Krzysia</h2>
                 <div>
-                    <div id="list-wish-krzys" style="margin-bottom: 15px; max-height: 180px; overflow-y: auto;"></div>
+                    <div id="list-wish-krzys" class="list-container"></div>
                 </div>
                 <div>
                     <input type="text" id="wish-krzys" placeholder="Dodaj marzenie lub link...">
@@ -296,7 +334,7 @@
             <div class="card">
                 <h2>🎬 Filmy do obejrzenia</h2>
                 <div>
-                    <div id="movies-list" style="margin-bottom: 15px; max-height: 180px; overflow-y: auto;"></div>
+                    <div id="movies-list" class="list-container"></div>
                 </div>
                 <div>
                     <input type="text" id="movie-title" placeholder="Tytuł lub link filmu...">
@@ -308,11 +346,22 @@
             <div class="card">
                 <h2>🍯 Słoik Wspomnień</h2>
                 <div>
-                    <div id="memories-list" style="margin-bottom: 15px; max-height: 180px; overflow-y: auto;"></div>
+                    <div id="memories-list" class="list-container"></div>
                 </div>
                 <div>
                     <textarea id="memory-text" placeholder="Miłe wspomnienie..." style="height: 40px; resize: none;"></textarea>
                     <button onclick="addMemory()" style="width: 100%;">WRZUĆ DO SŁOIKA</button>
+                </div>
+            </div>
+
+            <!-- 9. Kalendarz Adwentowy (Od 1 Grudnia) -->
+            <div class="card">
+                <h2>🎄 Kalendarz Adwentowy</h2>
+                <div id="advent-content" style="text-align: center;">
+                    <p style="font-size: 0.85rem; font-style: italic; color: #777; margin-bottom: 10px;">Magia świąt rozpoczyna się 1 grudnia!</p>
+                    <div class="advent-grid" id="advent-grid">
+                        <!-- Generowane automatycznie przez JS -->
+                    </div>
                 </div>
             </div>
 
@@ -327,7 +376,7 @@
 
     <!-- Logika bazy danych -->
     <script type="module">
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         window.initApp = function(db) {
             // Nastroje
@@ -479,6 +528,61 @@
                 });
                 document.getElementById('memories-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Słoik jest pusty...</div>';
             });
+
+            // Kalendarz Adwentowy - logika
+            const adventSurprises = {
+                1: "Dziś czeka na Ciebie gorąca czekolada i buziak! ☕",
+                2: "Wspólny wybór filmu na wieczór i przytulaski 🎬",
+                3: "Mała słodka niespodzianka w kieszeni kurtki 🍫",
+                4: "Wieczór bez telefonów – tylko my i rozmowy ✨",
+                5: "Krzysiu/Jusia stawia dziś ulubioną kawę! ☕",
+                6: "Mikołajkowe podarunki i mnóstwo miłości ❤️",
+                7: "Masz prawo do jednego zwolnienia z domowego obowiązku! 👑",
+                8: "Wspólne planowanie zimowego wypadu ❄️",
+                9: "Długie, niedzielne przytulanie bez limitu 🥰",
+                10: "Masaż pleców wieczorem na rozluźnienie 💆‍♀️",
+                11: "Słodkie liściki ukryte w różnych miejscach 💌",
+                12: "Jesteśmy już w połowie drogi do Świąt! Oglądamy świątedne komedie 🎄",
+                13: "Dziś Ty wybierasz obiad lub deser! 🥞",
+                14: "Romantyczny spacer w zimowej scenerii ❄️",
+                15: "Gorąca kąpiel i relaks przy świecach 🕯️",
+                16: "Wspólne pieczenie pierniczków lub ciasteczek 🍪",
+                17: "Wieczorne opowiadanie najlepszych wspomnień 🌟",
+                18: "Mały upominek od serca 🎁",
+                19: "Zrobienie ulubionej herbaty drugiej połówce 🫖",
+                20: "Słuchanie świątczanych piosenek i leniuchowanie 🎶",
+                21: "Zimowy wieczór pod kocem z filmem 🧸",
+                22: "Ostatnie przygotowania i ekscytacja przedświąteczna ✨",
+                23: "Magiczny czas tuż przed Wigilią 🎄",
+                24: "Wesołych Świąt! Najpiękniejszy prezent to my razem ❤️"
+            };
+
+            const grid = document.getElementById('advent-grid');
+            let adventHtml = "";
+            for(let i=1; i<=24; i++) {
+                adventHtml += `<div class="advent-box" onclick="openAdvent(${i})">${i}</div>`;
+            }
+            grid.innerHTML = adventHtml;
+
+            window.openAdvent = function(day) {
+                const now = new Date();
+                const currentMonth = now.getMonth() + 1; // 12 to grudzień
+                const currentDay = now.getDate();
+
+                // Testowo możesz odkomentować linię niżej, jeśli chcesz testować otwieranie okienek przed grudniem:
+                // if(true) { 
+                if (currentMonth < 12) {
+                    alert("Cierpliwości! Kalendarz adwentowy otworzy się dopiero 1 grudnia! 🎄");
+                    return;
+                }
+                if (currentMonth === 12 && currentDay < day) {
+                    alert(`Na dzień ${day} grudnia musisz jeszcze chwilę poczekać! ⏳`);
+                    return;
+                }
+
+                const msg = adventSurprises[day] || "Wspaniałego dnia pełnego miłości! ❤️";
+                alert(`Okienko nr ${day}:\n\n${msg}`);
+            }
 
             // Funkcje pomocnicze
             window.removeItem = function(coll, id) {
