@@ -117,7 +117,7 @@
             font-size: 0.85rem;
         }
 
-        button {
+        button, .link-btn {
             font-family: 'Playfair Display', serif;
             background-color: var(--accent-color);
             color: #fff;
@@ -125,11 +125,15 @@
             padding: 8px 14px;
             cursor: pointer;
             font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
             transition: background 0.2s;
         }
 
-        button:hover {
+        button:hover, .link-btn:hover {
             background-color: #6f3724;
+            color: #fff;
         }
 
         .moods-container {
@@ -185,6 +189,7 @@
             margin-bottom: 6px;
             border: 1px solid var(--border-color);
             font-size: 0.85rem;
+            word-break: break-all;
         }
 
         .list-item.checked span {
@@ -199,6 +204,29 @@
             cursor: pointer;
             font-size: 0.9rem;
             padding: 0 4px;
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .photo-item {
+            background: var(--accent-light);
+            border: 1px solid var(--border-color);
+            padding: 5px;
+            text-align: center;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
         }
 
         .advent-card {
@@ -335,39 +363,65 @@
                 </div>
             </div>
 
-            <!-- 5. Życzenia Jusii -->
+            <!-- 5. Życzenia Jusii (Link do strony) -->
             <div class="card" id="card-wish-jusia">
                 <div class="card-header" data-card="card-wish-jusia">
                     <h2>✨ Życzenia Jusii <span class="toggle-arrow">▼</span></h2>
                 </div>
-                <div class="card-content">
-                    <div>
-                        <div id="list-wish-jusia" class="list-container"></div>
-                    </div>
-                    <div>
-                        <input type="text" id="wish-jusia" placeholder="Dodaj marzenie lub link...">
-                        <button onclick="window.addWish('jusia')" style="width: 100%;">DODAJ</button>
-                    </div>
+                <div class="card-content" style="justify-content: center; align-items: center; text-align: center; padding: 20px 0;">
+                    <p style="font-size: 0.9rem; margin-bottom: 20px; font-style: italic;">Odwiedź stronę z listą marzeń i prezentów Jusii:</p>
+                    <a href="https://example.com/zyczenia-jusii" target="_blank" class="link-btn" style="width: 80%;">Otwórz Życzenia Jusii 🎁</a>
+                    <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">(Link możesz podmienić w kodzie strony)</p>
                 </div>
             </div>
 
-            <!-- 6. Życzenia Krzysia -->
+            <!-- 6. Życzenia Krzysia (Link do strony) -->
             <div class="card" id="card-wish-krzys">
                 <div class="card-header" data-card="card-wish-krzys">
                     <h2>✨ Życzenia Krzysia <span class="toggle-arrow">▼</span></h2>
                 </div>
+                <div class="card-content" style="justify-content: center; align-items: center; text-align: center; padding: 20px 0;">
+                    <p style="font-size: 0.9rem; margin-bottom: 20px; font-style: italic;">Odwiedź stronę z listą marzeń i prezentów Krzysia:</p>
+                    <a href="https://example.com/zyczenia-krzysia" target="_blank" class="link-btn" style="width: 80%;">Otwórz Życzenia Krzysia 🎁</a>
+                    <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">(Link możesz podmienić w kodzie strony)</p>
+                </div>
+            </div>
+
+            <!-- 7. Zdjęcia od Jusii -->
+            <div class="card" id="card-photos-jusia">
+                <div class="card-header" data-card="card-photos-jusia">
+                    <h2>📸 Zdjęcia od Jusii <span class="toggle-arrow">▼</span></h2>
+                </div>
                 <div class="card-content">
-                    <div>
-                        <div id="list-wish-krzys" class="list-container"></div>
+                    <div id="photos-list-jusia" class="photo-gallery">
+                        <div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>
                     </div>
                     <div>
-                        <input type="text" id="wish-krzys" placeholder="Dodaj marzenie lub link...">
-                        <button onclick="window.addWish('krzys')" style="width: 100%;">DODAJ</button>
+                        <input type="text" id="photo-desc-jusia" placeholder="Podpis zdjęcia...">
+                        <input type="file" id="photo-file-jusia" accept="image/*" style="font-size: 0.75rem;">
+                        <button onclick="window.uploadPhoto('jusia')" style="width: 100%;">WYŚLIJ ZDJĘCIE</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 7. Filmy do obejrzenia -->
+            <!-- 8. Zdjęcia od Krzysia -->
+            <div class="card" id="card-photos-krzys">
+                <div class="card-header" data-card="card-photos-krzys">
+                    <h2>📸 Zdjęcia od Krzysia <span class="toggle-arrow">▼</span></h2>
+                </div>
+                <div class="card-content">
+                    <div id="photos-list-krzys" class="photo-gallery">
+                        <div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>
+                    </div>
+                    <div>
+                        <input type="text" id="photo-desc-krzys" placeholder="Podpis zdjęcia...">
+                        <input type="file" id="photo-file-krzys" accept="image/*" style="font-size: 0.75rem;">
+                        <button onclick="window.uploadPhoto('krzys')" style="width: 100%;">WYŚLIJ ZDJĘCIE</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Filmy do obejrzenia -->
             <div class="card" id="card-movies">
                 <div class="card-header" data-card="card-movies">
                     <h2>🎬 Filmy do obejrzenia <span class="toggle-arrow">▼</span></h2>
@@ -383,7 +437,7 @@
                 </div>
             </div>
 
-            <!-- 8. Słoik Wspomnień -->
+            <!-- 10. Słoik Wspomnień -->
             <div class="card" id="card-memories">
                 <div class="card-header" data-card="card-memories">
                     <h2>🍯 Słoik Wspomnień <span class="toggle-arrow">▼</span></h2>
@@ -399,7 +453,7 @@
                 </div>
             </div>
 
-            <!-- 9. Kalendarz Adwentowy -->
+            <!-- 11. Kalendarz Adwentowy -->
             <div class="card advent-card" id="card-advent">
                 <div class="card-header" data-card="card-advent">
                     <h2>🎄 Kalendarz Adwentowy <span class="toggle-arrow">▼</span></h2>
@@ -514,30 +568,6 @@
                 document.getElementById('complaints-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak pism.</div>';
             });
 
-            // Życzenia
-            window.addWish = function(who) {
-                const input = document.getElementById(`wish-${who}`);
-                if (!input.value) return;
-                addDoc(collection(db, "wishes"), { who, text: input.value, checked: false, timestamp: Date.now() });
-                input.value = '';
-            };
-
-            onSnapshot(collection(db, "wishes"), (snapshot) => {
-                let htmlJusia = "";
-                let htmlKrzys = "";
-                snapshot.forEach((docSnap) => {
-                    let d = docSnap.data();
-                    let itemHtml = `<div class="list-item ${d.checked ? 'checked' : ''}">
-                        <label style="cursor:pointer;"><input type="checkbox" ${d.checked ? 'checked' : ''} onclick="window.toggleCheck('wishes', '${docSnap.id}', this.checked)"> <span>${d.text}</span></label>
-                        <button class="delete-btn" onclick="window.removeItem('wishes', '${docSnap.id}')">🗑️</button>
-                    </div>`;
-                    if (d.who === 'jusia') htmlJusia += itemHtml;
-                    else htmlKrzys += itemHtml;
-                });
-                document.getElementById('list-wish-jusia').innerHTML = htmlJusia || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>';
-                document.getElementById('list-wish-krzys').innerHTML = htmlKrzys || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>';
-            });
-
             // Randki
             window.addDateIdea = function() {
                 const title = document.getElementById('date-title').value;
@@ -589,6 +619,45 @@
                     </div>`;
                 });
                 document.getElementById('requests-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>';
+            });
+
+            // Zdjęcia (zamiana pliku na kod Base64 i zapis w bazie)
+            window.uploadPhoto = function(who) {
+                const fileInput = document.getElementById(`photo-file-${who}`);
+                const descInput = document.getElementById(`photo-desc-${who}`);
+                const file = fileInput.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(uploadEvent) {
+                    const base64Image = uploadEvent.target.result;
+                    addDoc(collection(db, "photos"), {
+                        who,
+                        image: base64Image,
+                        desc: descInput.value || "Zdjęcie",
+                        timestamp: Date.now()
+                    });
+                    descInput.value = '';
+                    fileInput.value = '';
+                };
+                reader.readAsDataURL(file);
+            };
+
+            onSnapshot(collection(db, "photos"), (snapshot) => {
+                let htmlJusia = "";
+                let htmlKrzys = "";
+                snapshot.forEach((docSnap) => {
+                    let d = docSnap.data();
+                    let item = `<div class="photo-item">
+                        <img src="${d.image}" alt="foto">
+                        <div style="font-size: 0.75rem; margin: 4px 0;">${d.desc}</div>
+                        <button class="delete-btn" onclick="window.removeItem('photos', '${docSnap.id}')">🗑️ Usuń</button>
+                    </div>`;
+                    if (d.who === 'jusia') htmlJusia += item;
+                    else htmlKrzys += item;
+                });
+                document.getElementById('photos-list-jusia').innerHTML = htmlJusia || '<div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>';
+                document.getElementById('photos-list-krzys').innerHTML = htmlKrzys || '<div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>';
             });
 
             // Filmy
