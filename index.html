@@ -61,6 +61,18 @@
             margin: 0 auto;
         }
 
+        /* Główny tytuł strony */
+        .main-header {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            border-bottom: 2px double var(--border-color);
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -71,11 +83,18 @@
             font-family: 'Playfair Display', serif;
             color: var(--accent-color);
             font-size: 1.3rem;
-            margin-top: 0;
-            margin-bottom: 15px;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .card-header {
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
-            text-align: center;
+            margin-bottom: 15px;
+            user-select: none;
         }
 
         .card {
@@ -95,6 +114,26 @@
             top: 4px; bottom: 4px; left: 4px; right: 4px;
             border: 1px dashed var(--border-color);
             pointer-events: none;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        /* Obsługa zwijania kart */
+        .card.collapsed .card-content {
+            display: none;
+        }
+        .card.collapsed {
+            padding-bottom: 20px;
+        }
+
+        .toggle-arrow {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            transition: transform 0.3s;
         }
 
         input, textarea, select {
@@ -192,17 +231,26 @@
             padding: 0 4px;
         }
 
-        /* Kalendarz adwentowy siatka */
+        /* Zimowy Kalendarz Adwentowy */
+        .advent-card {
+            background: #eef3f8 !important;
+            border-color: #b0c4de !important;
+        }
+        .advent-card h2 {
+            color: #2c4d6f !important;
+        }
+        .advent-card .card-header {
+            border-bottom-color: #b0c4de !important;
+        }
         .advent-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 6px;
             text-align: center;
         }
-
         .advent-box {
-            background: var(--accent-light);
-            border: 1px solid var(--border-color);
+            background: #e1edf8;
+            border: 1px solid #9fbcd7;
             aspect-ratio: 1;
             display: flex;
             align-items: center;
@@ -210,19 +258,13 @@
             font-family: 'Playfair Display', serif;
             font-weight: bold;
             font-size: 0.9rem;
+            color: #1c3b57;
             cursor: pointer;
             transition: all 0.2s;
         }
-
         .advent-box:hover {
-            background: var(--accent-color);
+            background: #2c4d6f;
             color: white;
-        }
-
-        .advent-box.opened {
-            background: #e3d7cb;
-            color: #777;
-            text-decoration: line-through;
         }
 
         .spotify-full {
@@ -234,141 +276,186 @@
 <body>
 
     <div class="container">
+        <!-- Główny tytuł -->
+        <h1 class="main-header">NaBiezaco</h1>
+
         <div class="dashboard-grid">
             
             <!-- 1. Nastroje -->
-            <div class="card">
-                <h2>🎭 Nastroje</h2>
-                <div class="moods-container">
-                    <div class="mood-column">
-                        <b style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 5px;">Jusia</b>
-                        <div id="jusia-mood-display" class="current-mood-display">...</div>
-                        <div id="jusia-mood-time" style="font-size: 0.75rem; color: #777; margin-bottom: 10px;"></div>
-                        <div class="mood-emojis" onclick="setMood('jusia', event)">
-                            <span data-mood="💖">💖</span><span data-mood="✨">✨</span><span data-mood="🥰">🥰</span>
-                            <span data-mood="🥺">🥺</span><span data-mood="🍓">🍓</span><span data-mood="☕">☕</span>
-                            <span data-mood="😴">😴</span><span data-mood="🔥">🔥</span><span data-mood="🍷">🍷</span>
+            <div class="card" id="card-moods">
+                <div class="card-header" onclick="toggleCard('card-moods')">
+                    <h2>🎭 Nastroje <span class="toggle-arrow">▼</span></h2>
+                </div>
+                <div class="card-content">
+                    <div class="moods-container">
+                        <div class="mood-column">
+                            <b style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 5px;">Jusia</b>
+                            <div id="jusia-mood-display" class="current-mood-display">...</div>
+                            <div id="jusia-mood-time" style="font-size: 0.75rem; color: #777; margin-bottom: 10px;"></div>
+                            <div class="mood-emojis" onclick="setMood('jusia', event)">
+                                <span data-mood="💖">💖</span><span data-mood="✨">✨</span><span data-mood="🥰">🥰</span>
+                                <span data-mood="🥺">🥺</span><span data-mood="🍓">🍓</span><span data-mood="☕">☕</span>
+                                <span data-mood="😴">😴</span><span data-mood="🔥">🔥</span><span data-mood="🍷">🍷</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mood-column">
-                        <b style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 5px;">Krzyś</b>
-                        <div id="krzys-mood-display" class="current-mood-display">...</div>
-                        <div id="krzys-mood-time" style="font-size: 0.75rem; color: #777; margin-bottom: 10px;"></div>
-                        <div class="mood-emojis" onclick="setMood('krzys', event)">
-                            <span data-mood="😎">😎</span><span data-mood="💖">💖</span><span data-mood="🥰">🥰</span>
-                            <span data-mood="🔥">🔥</span><span data-mood="🎮">🎮</span><span data-mood="☕">☕</span>
-                            <span data-mood="😴">😴</span><span data-mood="🥺">🥺</span><span data-mood="🍓">🍓</span>
+                        <div class="mood-column">
+                            <b style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 5px;">Krzyś</b>
+                            <div id="krzys-mood-display" class="current-mood-display">...</div>
+                            <div id="krzys-mood-time" style="font-size: 0.75rem; color: #777; margin-bottom: 10px;"></div>
+                            <div class="mood-emojis" onclick="setMood('krzys', event)">
+                                <span data-mood="😎">😎</span><span data-mood="💖">💖</span><span data-mood="🥰">🥰</span>
+                                <span data-mood="🔥">🔥</span><span data-mood="🎮">🎮</span><span data-mood="☕">☕</span>
+                                <span data-mood="😴">😴</span><span data-mood="🥺">🥺</span><span data-mood="🍓">🍓</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- 2. Skrzynka Skarg -->
-            <div class="card">
-                <h2>✍️ Skrzynka Skarg</h2>
-                <div>
-                    <div id="complaints-list" class="list-container">
-                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak pism.</div>
-                    </div>
+            <div class="card" id="card-complaints">
+                <div class="card-header" onclick="toggleCard('card-complaints')">
+                    <h2>✍️ Skrzynka Skarg <span class="toggle-arrow">▼</span></h2>
                 </div>
-                <div>
-                    <input type="text" id="complaint-text" placeholder="Złóż pismo...">
-                    <button onclick="addComplaint()" style="float: right;">📤</button>
+                <div class="card-content">
+                    <div>
+                        <div id="complaints-list" class="list-container">
+                            <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak pism.</div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" id="complaint-text" placeholder="Złóż pismo...">
+                        <button onclick="addComplaint()" style="float: right;">📤</button>
+                    </div>
                 </div>
             </div>
 
             <!-- 3. Propozycje Randek -->
-            <div class="card">
-                <h2>💌 Propozycje Randek</h2>
-                <div>
-                    <div id="dates-list" class="list-container">
-                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak propozycji...</div>
-                    </div>
+            <div class="card" id="card-dates">
+                <div class="card-header" onclick="toggleCard('card-dates')">
+                    <h2>💌 Propozycje Randek <span class="toggle-arrow">▼</span></h2>
                 </div>
-                <div>
-                    <input type="datetime-local" id="date-time">
-                    <input type="text" id="date-title" placeholder="Gdzie się udamy?">
-                    <button onclick="addDateIdea()" style="width: 100%;">WYŚLIJ</button>
+                <div class="card-content">
+                    <div>
+                        <div id="dates-list" class="list-container">
+                            <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak propozycji...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="datetime-local" id="date-time">
+                        <input type="text" id="date-title" placeholder="Gdzie się udamy?">
+                        <button onclick="addDateIdea()" style="width: 100%;">WYŚLIJ</button>
+                    </div>
                 </div>
             </div>
 
             <!-- 4. Drobne Prośby -->
-            <div class="card">
-                <h2>❤️ Drobne Prośby</h2>
-                <div>
-                    <div id="requests-list" class="list-container">
-                        <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>
-                    </div>
+            <div class="card" id="card-requests">
+                <div class="card-header" onclick="toggleCard('card-requests')">
+                    <h2>❤️ Drobne Prośby <span class="toggle-arrow">▼</span></h2>
                 </div>
-                <div>
-                    <input type="text" id="request-text" placeholder="O co prosisz?">
-                    <button onclick="addRequest()" style="float: right;">💌</button>
+                <div class="card-content">
+                    <div>
+                        <div id="requests-list" class="list-container">
+                            <div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" id="request-text" placeholder="O co prosisz?">
+                        <button onclick="addRequest()" style="float: right;">💌</button>
+                    </div>
                 </div>
             </div>
 
             <!-- 5. Życzenia Jusii -->
-            <div class="card">
-                <h2>✨ Życzenia Jusii</h2>
-                <div>
-                    <div id="list-wish-jusia" class="list-container"></div>
+            <div class="card" id="card-wish-jusia">
+                <div class="card-header" onclick="toggleCard('card-wish-jusia')">
+                    <h2>✨ Życzenia Jusii <span class="toggle-arrow">▼</span></h2>
                 </div>
-                <div>
-                    <input type="text" id="wish-jusia" placeholder="Dodaj marzenie lub link...">
-                    <button onclick="addWish('jusia')" style="width: 100%;">DODAJ</button>
-                </div>
-            </div>
-
-            <!-- 6. Życzenia Krzysia -->
-            <div class="card">
-                <h2>✨ Życzenia Krzysia</h2>
-                <div>
-                    <div id="list-wish-krzys" class="list-container"></div>
-                </div>
-                <div>
-                    <input type="text" id="wish-krzys" placeholder="Dodaj marzenie lub link...">
-                    <button onclick="addWish('krzys')" style="width: 100%;">DODAJ</button>
-                </div>
-            </div>
-
-            <!-- 7. Filmy do obejrzenia -->
-            <div class="card">
-                <h2>🎬 Filmy do obejrzenia</h2>
-                <div>
-                    <div id="movies-list" class="list-container"></div>
-                </div>
-                <div>
-                    <input type="text" id="movie-title" placeholder="Tytuł lub link filmu...">
-                    <button onclick="addMovie()" style="width: 100%;">DODAJ</button>
-                </div>
-            </div>
-
-            <!-- 8. Słoik Wspomnień -->
-            <div class="card">
-                <h2>🍯 Słoik Wspomnień</h2>
-                <div>
-                    <div id="memories-list" class="list-container"></div>
-                </div>
-                <div>
-                    <textarea id="memory-text" placeholder="Miłe wspomnienie..." style="height: 40px; resize: none;"></textarea>
-                    <button onclick="addMemory()" style="width: 100%;">WRZUĆ DO SŁOIKA</button>
-                </div>
-            </div>
-
-            <!-- 9. Kalendarz Adwentowy (Od 1 Grudnia) -->
-            <div class="card">
-                <h2>🎄 Kalendarz Adwentowy</h2>
-                <div id="advent-content" style="text-align: center;">
-                    <p style="font-size: 0.85rem; font-style: italic; color: #777; margin-bottom: 10px;">Magia świąt rozpoczyna się 1 grudnia!</p>
-                    <div class="advent-grid" id="advent-grid">
-                        <!-- Generowane automatycznie przez JS -->
+                <div class="card-content">
+                    <div>
+                        <div id="list-wish-jusia" class="list-container"></div>
+                    </div>
+                    <div>
+                        <input type="text" id="wish-jusia" placeholder="Dodaj marzenie lub link...">
+                        <button onclick="addWish('jusia')" style="width: 100%;">DODAJ</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Nuta na dziś (Spotify) -->
-            <div class="card spotify-full">
-                <h2>🎵 Nuta na dziś</h2>
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <!-- 6. Życzenia Krzysia -->
+            <div class="card" id="card-wish-krzys">
+                <div class="card-header" onclick="toggleCard('card-wish-krzys')">
+                    <h2>✨ Życzenia Krzysia <span class="toggle-arrow">▼</span></h2>
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div id="list-wish-krzys" class="list-container"></div>
+                    </div>
+                    <div>
+                        <input type="text" id="wish-krzys" placeholder="Dodaj marzenie lub link...">
+                        <button onclick="addWish('krzys')" style="width: 100%;">DODAJ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Filmy do obejrzenia -->
+            <div class="card" id="card-movies">
+                <div class="card-header" onclick="toggleCard('card-movies')">
+                    <h2>🎬 Filmy do obejrzenia <span class="toggle-arrow">▼</span></h2>
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div id="movies-list" class="list-container"></div>
+                    </div>
+                    <div>
+                        <input type="text" id="movie-title" placeholder="Tytuł lub link filmu...">
+                        <button onclick="addMovie()" style="width: 100%;">DODAJ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Słoik Wspomnień -->
+            <div class="card" id="card-memories">
+                <div class="card-header" onclick="toggleCard('card-memories')">
+                    <h2>🍯 Słoik Wspomnień <span class="toggle-arrow">▼</span></h2>
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div id="memories-list" class="list-container"></div>
+                    </div>
+                    <div>
+                        <textarea id="memory-text" placeholder="Miłe wspomnienie..." style="height: 40px; resize: none;"></textarea>
+                        <button onclick="addMemory()" style="width: 100%;">WRZUĆ DO SŁOIKA</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Kalendarz Adwentowy (Zimowy) -->
+            <div class="card advent-card" id="card-advent">
+                <div class="card-header" onclick="toggleCard('card-advent')">
+                    <h2>🎄 Kalendarz Adwentowy <span class="toggle-arrow">▼</span></h2>
+                </div>
+                <div class="card-content">
+                    <div style="text-align: center;">
+                        <p style="font-size: 0.85rem; font-style: italic; color: #4a6b8a; margin-bottom: 10px;">Magia świąt rozpoczyna się 1 grudnia! ❄️</p>
+                        <div class="advent-grid" id="advent-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nuta na dziś (Spotify zmienialne) -->
+            <div class="card spotify-full" id="card-spotify">
+                <div class="card-header" onclick="toggleCard('card-spotify')">
+                    <h2>🎵 Nuta na dziś <span class="toggle-arrow">▼</span></h2>
+                </div>
+                <div class="card-content">
+                    <iframe id="spotify-iframe" style="border-radius:12px; margin-bottom: 15px;" src="" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="spotify-link-input" placeholder="Wklej link do utworu ze Spotify..." style="margin-bottom:0;">
+                        <button onclick="updateSpotifySong()">Zmień nutę</button>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -376,9 +463,25 @@
 
     <!-- Logika bazy danych -->
     <script type="module">
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         window.initApp = function(db) {
+            // Obsługa zwijania kart z pamięcią w localStorage
+            window.toggleCard = function(cardId) {
+                const card = document.getElementById(cardId);
+                card.classList.toggle('collapsed');
+                const isCollapsed = card.classList.contains('collapsed');
+                localStorage.setItem(cardId + '_collapsed', isCollapsed);
+            };
+
+            // Przywracanie stanu kart przy starcie
+            document.querySelectorAll('.card').forEach(card => {
+                const id = card.id;
+                if(localStorage.getItem(id + '_collapsed') === 'true') {
+                    card.classList.add('collapsed');
+                }
+            });
+
             // Nastroje
             window.setMood = function(who, e) {
                 const mood = e.target.getAttribute('data-mood');
@@ -529,6 +632,29 @@
                 document.getElementById('memories-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Słoik jest pusty...</div>';
             });
 
+            // Spotify obsługa dynamiczna
+            window.updateSpotifySong = function() {
+                const inputVal = document.getElementById('spotify-link-input').value;
+                let trackId = "4cOdK2wGLETKBW3PvgPWqT"; // domyślny utwór zapasowy
+                
+                // Wyciąganie ID utworu ze zwykłego linku Spotify np. https://open.spotify.com/track/TUTAJ_ID?si=...
+                const match = inputVal.match(/track\/([a-zA-Z0-9]+)/);
+                if (match && match[1]) {
+                    trackId = match[1];
+                }
+
+                setDoc(doc(db, "settings", "spotify"), { trackId }, { merge: true });
+                document.getElementById('spotify-link-input').value = '';
+            }
+
+            onSnapshot(doc(db, "settings", "spotify"), (docSnap) => {
+                let trackId = "4cOdK2wGLETKBW3PvgPWqT";
+                if (docSnap.exists() && docSnap.data().trackId) {
+                    trackId = docSnap.data().trackId;
+                }
+                document.getElementById('spotify-iframe').src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`;
+            });
+
             // Kalendarz Adwentowy - logika
             const adventSurprises = {
                 1: "Dziś czeka na Ciebie gorąca czekolada i buziak! ☕",
@@ -542,7 +668,7 @@
                 9: "Długie, niedzielne przytulanie bez limitu 🥰",
                 10: "Masaż pleców wieczorem na rozluźnienie 💆‍♀️",
                 11: "Słodkie liściki ukryte w różnych miejscach 💌",
-                12: "Jesteśmy już w połowie drogi do Świąt! Oglądamy świątedne komedie 🎄",
+                12: "Jesteśmy już w połowie drogi do Świąt! Oglądamy świąteczne komedie 🎄",
                 13: "Dziś Ty wybierasz obiad lub deser! 🥞",
                 14: "Romantyczny spacer w zimowej scenerii ❄️",
                 15: "Gorąca kąpiel i relaks przy świecach 🕯️",
@@ -550,7 +676,7 @@
                 17: "Wieczorne opowiadanie najlepszych wspomnień 🌟",
                 18: "Mały upominek od serca 🎁",
                 19: "Zrobienie ulubionej herbaty drugiej połówce 🫖",
-                20: "Słuchanie świątczanych piosenek i leniuchowanie 🎶",
+                20: "Słuchanie świątecznych piosenek i leniuchowanie 🎶",
                 21: "Zimowy wieczór pod kocem z filmem 🧸",
                 22: "Ostatnie przygotowania i ekscytacja przedświąteczna ✨",
                 23: "Magiczny czas tuż przed Wigilią 🎄",
@@ -566,11 +692,9 @@
 
             window.openAdvent = function(day) {
                 const now = new Date();
-                const currentMonth = now.getMonth() + 1; // 12 to grudzień
+                const currentMonth = now.getMonth() + 1;
                 const currentDay = now.getDate();
 
-                // Testowo możesz odkomentować linię niżej, jeśli chcesz testować otwieranie okienek przed grudniem:
-                // if(true) { 
                 if (currentMonth < 12) {
                     alert("Cierpliwości! Kalendarz adwentowy otworzy się dopiero 1 grudnia! 🎄");
                     return;
