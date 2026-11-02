@@ -206,27 +206,44 @@
             padding: 0 4px;
         }
 
-        .photo-gallery {
+        /* Nowa forma galerii zdjęć (miniaturki) */
+        .photo-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            max-height: 220px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            max-height: 150px;
             overflow-y: auto;
-            margin-bottom: 15px;
-        }
-
-        .photo-item {
-            background: var(--accent-light);
+            margin-bottom: 10px;
+            background: var(--bg-color);
+            padding: 6px;
             border: 1px solid var(--border-color);
-            padding: 5px;
-            text-align: center;
         }
 
-        .photo-item img {
+        .photo-thumb {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: #fff;
+        }
+
+        .photo-thumb img {
             width: 100%;
-            height: 100px;
+            height: 100%;
             object-fit: cover;
-            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .photo-thumb .delete-mini {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(140, 74, 50, 0.8);
+            color: white;
+            border: none;
+            font-size: 0.6rem;
+            padding: 2px 4px;
+            cursor: pointer;
         }
 
         .advent-card {
@@ -326,10 +343,10 @@
                 </div>
             </div>
 
-            <!-- 3. Propozycje Randek -->
+            <!-- 3. Propozycje Randek (z komentarzem) -->
             <div class="card" id="card-dates">
                 <div class="card-header" data-card="card-dates">
-                    <h2>💌 Propozycje Randek <span class="toggle-arrow">▼</span></h2>
+                    <h2>💌 Propozycje Randek / Spacerów <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
                     <div>
@@ -339,7 +356,8 @@
                     </div>
                     <div>
                         <input type="datetime-local" id="date-time">
-                        <input type="text" id="date-title" placeholder="Gdzie się udamy?">
+                        <input type="text" id="date-title" placeholder="Gdzie idziemy? (np. Spacer)">
+                        <input type="text" id="date-comment" placeholder="Komentarz / szczegóły (np. Weź ciepłą kurtkę)">
                         <button onclick="window.addDateIdea()" style="width: 100%;">WYŚLIJ</button>
                     </div>
                 </div>
@@ -363,60 +381,56 @@
                 </div>
             </div>
 
-            <!-- 5. Życzenia Jusii (Link do strony) -->
+            <!-- 5. Życzenia Jusii (Dokument Google) -->
             <div class="card" id="card-wish-jusia">
                 <div class="card-header" data-card="card-wish-jusia">
                     <h2>✨ Życzenia Jusii <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content" style="justify-content: center; align-items: center; text-align: center; padding: 20px 0;">
-                    <p style="font-size: 0.9rem; margin-bottom: 20px; font-style: italic;">Odwiedź stronę z listą marzeń i prezentów Jusii:</p>
-                    <a href="https://example.com/zyczenia-jusii" target="_blank" class="link-btn" style="width: 80%;">Otwórz Życzenia Jusii 🎁</a>
-                    <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">(Link możesz podmienić w kodzie strony)</p>
+                    <p style="font-size: 0.9rem; margin-bottom: 20px; font-style: italic;">Oficjalna lista życzeń i prezentów Jusii:</p>
+                    <a href="https://docs.google.com/document/d/15OHhysAVEUJG0ZqJ6CDv6dyfO1GHqSxVrlHg3uLltoQ/edit?tab=t.0" target="_blank" class="link-btn" style="width: 85%;">Otwórz Listę Jusii 🎁</a>
                 </div>
             </div>
 
-            <!-- 6. Życzenia Krzysia (Link do strony) -->
+            <!-- 6. Życzenia Krzysia (Dokument Google) -->
             <div class="card" id="card-wish-krzys">
                 <div class="card-header" data-card="card-wish-krzys">
                     <h2>✨ Życzenia Krzysia <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content" style="justify-content: center; align-items: center; text-align: center; padding: 20px 0;">
-                    <p style="font-size: 0.9rem; margin-bottom: 20px; font-style: italic;">Odwiedź stronę z listą marzeń i prezentów Krzysia:</p>
-                    <a href="https://example.com/zyczenia-krzysia" target="_blank" class="link-btn" style="width: 80%;">Otwórz Życzenia Krzysia 🎁</a>
-                    <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">(Link możesz podmienić w kodzie strony)</p>
+                    <p style="font-size: 0.9rem; margin-bottom: 20px; font-style: italic;">Oficjalna lista życzeń i prezentów Krzysia:</p>
+                    <a href="https://docs.google.com/document/d/1tcERR-4wSlp88nDi7s80Upk1I6vsZOjjOq5_1mLAmfc/edit?tab=t.0" target="_blank" class="link-btn" style="width: 85%;">Otwórz Listę Krzysia 🎁</a>
                 </div>
             </div>
 
-            <!-- 7. Zdjęcia od Jusii -->
+            <!-- 7. Mini Galeria: Zdjęcia od Jusii -->
             <div class="card" id="card-photos-jusia">
                 <div class="card-header" data-card="card-photos-jusia">
-                    <h2>📸 Zdjęcia od Jusii <span class="toggle-arrow">▼</span></h2>
+                    <h2>📸 Mini Galeria Jusii <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
-                    <div id="photos-list-jusia" class="photo-gallery">
-                        <div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>
+                    <div id="photos-list-jusia" class="photo-grid">
+                        <div style="grid-column: span 3; text-align: center; font-style: italic; color: #888; font-size: 0.8rem; padding: 10px;">Brak zdjęć...</div>
                     </div>
                     <div>
-                        <input type="text" id="photo-desc-jusia" placeholder="Podpis zdjęcia...">
-                        <input type="file" id="photo-file-jusia" accept="image/*" style="font-size: 0.75rem;">
-                        <button onclick="window.uploadPhoto('jusia')" style="width: 100%;">WYŚLIJ ZDJĘCIE</button>
+                        <input type="file" id="photo-file-jusia" accept="image/*" style="font-size: 0.75rem; margin-bottom: 6px;">
+                        <button onclick="window.uploadPhoto('jusia')" style="width: 100%; padding: 6px;">DODAJ ZDJĘCIE</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 8. Zdjęcia od Krzysia -->
+            <!-- 8. Mini Galeria: Zdjęcia od Krzysia -->
             <div class="card" id="card-photos-krzys">
                 <div class="card-header" data-card="card-photos-krzys">
-                    <h2>📸 Zdjęcia od Krzysia <span class="toggle-arrow">▼</span></h2>
+                    <h2>📸 Mini Galeria Krzysia <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
-                    <div id="photos-list-krzys" class="photo-gallery">
-                        <div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>
+                    <div id="photos-list-krzys" class="photo-grid">
+                        <div style="grid-column: span 3; text-align: center; font-style: italic; color: #888; font-size: 0.8rem; padding: 10px;">Brak zdjęć...</div>
                     </div>
                     <div>
-                        <input type="text" id="photo-desc-krzys" placeholder="Podpis zdjęcia...">
-                        <input type="file" id="photo-file-krzys" accept="image/*" style="font-size: 0.75rem;">
-                        <button onclick="window.uploadPhoto('krzys')" style="width: 100%;">WYŚLIJ ZDJĘCIE</button>
+                        <input type="file" id="photo-file-krzys" accept="image/*" style="font-size: 0.75rem; margin-bottom: 6px;">
+                        <button onclick="window.uploadPhoto('krzys')" style="width: 100%; padding: 6px;">DODAJ ZDJĘCIE</button>
                     </div>
                 </div>
             </div>
@@ -568,14 +582,16 @@
                 document.getElementById('complaints-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak pism.</div>';
             });
 
-            // Randki
+            // Randki (z komentarzem)
             window.addDateIdea = function() {
                 const title = document.getElementById('date-title').value;
                 const time = document.getElementById('date-time').value;
+                const comment = document.getElementById('date-comment').value;
                 if (!title) return;
-                addDoc(collection(db, "dates"), { title, time, status: "Oczekuje na akceptację ⏳", timestamp: Date.now() });
+                addDoc(collection(db, "dates"), { title, time, comment, status: "Oczekuje na akceptację ⏳", timestamp: Date.now() });
                 document.getElementById('date-title').value = '';
                 document.getElementById('date-time').value = '';
+                document.getElementById('date-comment').value = '';
             };
 
             window.updateDateStatus = function(id, status) {
@@ -586,8 +602,10 @@
                 let html = "";
                 snapshot.forEach((docSnap) => {
                     let d = docSnap.data();
+                    let commentHtml = d.comment ? `<div style="font-size: 0.75rem; color: #555; margin-top: 2px;">💬 ${d.comment}</div>` : '';
                     html += `<div class="list-item" style="flex-direction: column; align-items: flex-start; gap: 4px; padding: 8px;">
                         <div><b>${d.title}</b> (${d.time ? d.time.replace('T', ' ') : 'Brak godziny'})</div>
+                        ${commentHtml}
                         <div style="font-size: 0.75rem; font-style: italic;">Status: ${d.status}</div>
                         <div style="display:flex; gap:6px; margin-top:2px; width: 100%; justify-content: space-between;">
                             <div>
@@ -621,10 +639,9 @@
                 document.getElementById('requests-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>';
             });
 
-            // Zdjęcia (zamiana pliku na kod Base64 i zapis w bazie)
+            // Mini Galeria Zdjęć
             window.uploadPhoto = function(who) {
                 const fileInput = document.getElementById(`photo-file-${who}`);
-                const descInput = document.getElementById(`photo-desc-${who}`);
                 const file = fileInput.files[0];
                 if (!file) return;
 
@@ -634,10 +651,8 @@
                     addDoc(collection(db, "photos"), {
                         who,
                         image: base64Image,
-                        desc: descInput.value || "Zdjęcie",
                         timestamp: Date.now()
                     });
-                    descInput.value = '';
                     fileInput.value = '';
                 };
                 reader.readAsDataURL(file);
@@ -648,16 +663,15 @@
                 let htmlKrzys = "";
                 snapshot.forEach((docSnap) => {
                     let d = docSnap.data();
-                    let item = `<div class="photo-item">
-                        <img src="${d.image}" alt="foto">
-                        <div style="font-size: 0.75rem; margin: 4px 0;">${d.desc}</div>
-                        <button class="delete-btn" onclick="window.removeItem('photos', '${docSnap.id}')">🗑️ Usuń</button>
+                    let item = `<div class="photo-thumb">
+                        <img src="${d.image}" alt="mini" onclick="window.open('${d.image}', '_blank')">
+                        <button class="delete-mini" onclick="window.removeItem('photos', '${docSnap.id}')">✕</button>
                     </div>`;
                     if (d.who === 'jusia') htmlJusia += item;
                     else htmlKrzys += item;
                 });
-                document.getElementById('photos-list-jusia').innerHTML = htmlJusia || '<div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>';
-                document.getElementById('photos-list-krzys').innerHTML = htmlKrzys || '<div style="grid-column: span 2; text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak zdjęć...</div>';
+                document.getElementById('photos-list-jusia').innerHTML = htmlJusia || '<div style="grid-column: span 3; text-align: center; font-style: italic; color: #888; font-size: 0.8rem; padding: 10px;">Brak zdjęć...</div>';
+                document.getElementById('photos-list-krzys').innerHTML = htmlKrzys || '<div style="grid-column: span 3; text-align: center; font-style: italic; color: #888; font-size: 0.8rem; padding: 10px;">Brak zdjęć...</div>';
             });
 
             // Filmy
