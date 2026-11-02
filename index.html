@@ -7,35 +7,6 @@
     <!-- Czcionki vintage -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCDIF06NUV6cXSATyYoILtdrSCyN2cc-W4",
-            authDomain: "aplikacja-27301.firebaseapp.com",
-            projectId: "aplikacja-27301",
-            storageBucket: "aplikacja-27301.firebasestorage.app",
-            messagingSenderId: "193190488932",
-            appId: "1:193190488932:web:aac273e693cc3b9a7e6871",
-            measurementId: "G-Q36E1Y3H9L"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        signInAnonymously(auth).catch((error) => console.error("Błąd autoryzacji:", error));
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                initApp(db);
-            }
-        });
-    </script>
-
     <style>
         :root {
             --bg-color: #f7f3ed;
@@ -61,7 +32,6 @@
             margin: 0 auto;
         }
 
-        /* Główny tytuł strony */
         .main-header {
             text-align: center;
             font-family: 'Playfair Display', serif;
@@ -87,7 +57,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
             width: 100%;
         }
 
@@ -95,6 +64,7 @@
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
             margin-bottom: 15px;
+            cursor: pointer;
             user-select: none;
         }
 
@@ -123,7 +93,6 @@
             flex-grow: 1;
         }
 
-        /* Obsługa zwijania kart */
         .card.collapsed .card-content {
             display: none !important;
         }
@@ -232,7 +201,6 @@
             padding: 0 4px;
         }
 
-        /* Zimowy Kalendarz Adwentowy */
         .advent-card {
             background: #eef3f8 !important;
             border-color: #b0c4de !important;
@@ -277,14 +245,13 @@
 <body>
 
     <div class="container">
-        <!-- Główny tytuł -->
         <h1 class="main-header">NaBiezaco</h1>
 
         <div class="dashboard-grid">
             
             <!-- 1. Nastroje -->
             <div class="card" id="card-moods">
-                <div class="card-header" onclick="toggleCard('card-moods')">
+                <div class="card-header" data-card="card-moods">
                     <h2>🎭 Nastroje <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -293,7 +260,7 @@
                             <b style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 5px;">Jusia</b>
                             <div id="jusia-mood-display" class="current-mood-display">...</div>
                             <div id="jusia-mood-time" style="font-size: 0.75rem; color: #777; margin-bottom: 10px;"></div>
-                            <div class="mood-emojis" onclick="setMood('jusia', event)">
+                            <div class="mood-emojis" data-who="jusia">
                                 <span data-mood="💖">💖</span><span data-mood="✨">✨</span><span data-mood="🥰">🥰</span>
                                 <span data-mood="🥺">🥺</span><span data-mood="🍓">🍓</span><span data-mood="☕">☕</span>
                                 <span data-mood="😴">😴</span><span data-mood="🔥">🔥</span><span data-mood="🍷">🍷</span>
@@ -303,7 +270,7 @@
                             <b style="font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 5px;">Krzyś</b>
                             <div id="krzys-mood-display" class="current-mood-display">...</div>
                             <div id="krzys-mood-time" style="font-size: 0.75rem; color: #777; margin-bottom: 10px;"></div>
-                            <div class="mood-emojis" onclick="setMood('krzys', event)">
+                            <div class="mood-emojis" data-who="krzys">
                                 <span data-mood="😎">😎</span><span data-mood="💖">💖</span><span data-mood="🥰">🥰</span>
                                 <span data-mood="🔥">🔥</span><span data-mood="🎮">🎮</span><span data-mood="☕">☕</span>
                                 <span data-mood="😴">😴</span><span data-mood="🥺">🥺</span><span data-mood="🍓">🍓</span>
@@ -315,7 +282,7 @@
 
             <!-- 2. Skrzynka Skarg -->
             <div class="card" id="card-complaints">
-                <div class="card-header" onclick="toggleCard('card-complaints')">
+                <div class="card-header" data-card="card-complaints">
                     <h2>✍️ Skrzynka Skarg <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -326,14 +293,14 @@
                     </div>
                     <div>
                         <input type="text" id="complaint-text" placeholder="Złóż pismo...">
-                        <button onclick="addComplaint()" style="float: right;">📤</button>
+                        <button onclick="window.addComplaint()" style="float: right;">📤</button>
                     </div>
                 </div>
             </div>
 
             <!-- 3. Propozycje Randek -->
             <div class="card" id="card-dates">
-                <div class="card-header" onclick="toggleCard('card-dates')">
+                <div class="card-header" data-card="card-dates">
                     <h2>💌 Propozycje Randek <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -345,14 +312,14 @@
                     <div>
                         <input type="datetime-local" id="date-time">
                         <input type="text" id="date-title" placeholder="Gdzie się udamy?">
-                        <button onclick="addDateIdea()" style="width: 100%;">WYŚLIJ</button>
+                        <button onclick="window.addDateIdea()" style="width: 100%;">WYŚLIJ</button>
                     </div>
                 </div>
             </div>
 
             <!-- 4. Drobne Prośby -->
             <div class="card" id="card-requests">
-                <div class="card-header" onclick="toggleCard('card-requests')">
+                <div class="card-header" data-card="card-requests">
                     <h2>❤️ Drobne Prośby <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -363,14 +330,14 @@
                     </div>
                     <div>
                         <input type="text" id="request-text" placeholder="O co prosisz?">
-                        <button onclick="addRequest()" style="float: right;">💌</button>
+                        <button onclick="window.addRequest()" style="float: right;">💌</button>
                     </div>
                 </div>
             </div>
 
             <!-- 5. Życzenia Jusii -->
             <div class="card" id="card-wish-jusia">
-                <div class="card-header" onclick="toggleCard('card-wish-jusia')">
+                <div class="card-header" data-card="card-wish-jusia">
                     <h2>✨ Życzenia Jusii <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -379,14 +346,14 @@
                     </div>
                     <div>
                         <input type="text" id="wish-jusia" placeholder="Dodaj marzenie lub link...">
-                        <button onclick="addWish('jusia')" style="width: 100%;">DODAJ</button>
+                        <button onclick="window.addWish('jusia')" style="width: 100%;">DODAJ</button>
                     </div>
                 </div>
             </div>
 
             <!-- 6. Życzenia Krzysia -->
             <div class="card" id="card-wish-krzys">
-                <div class="card-header" onclick="toggleCard('card-wish-krzys')">
+                <div class="card-header" data-card="card-wish-krzys">
                     <h2>✨ Życzenia Krzysia <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -395,14 +362,14 @@
                     </div>
                     <div>
                         <input type="text" id="wish-krzys" placeholder="Dodaj marzenie lub link...">
-                        <button onclick="addWish('krzys')" style="width: 100%;">DODAJ</button>
+                        <button onclick="window.addWish('krzys')" style="width: 100%;">DODAJ</button>
                     </div>
                 </div>
             </div>
 
             <!-- 7. Filmy do obejrzenia -->
             <div class="card" id="card-movies">
-                <div class="card-header" onclick="toggleCard('card-movies')">
+                <div class="card-header" data-card="card-movies">
                     <h2>🎬 Filmy do obejrzenia <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -411,14 +378,14 @@
                     </div>
                     <div>
                         <input type="text" id="movie-title" placeholder="Tytuł lub link filmu...">
-                        <button onclick="addMovie()" style="width: 100%;">DODAJ</button>
+                        <button onclick="window.addMovie()" style="width: 100%;">DODAJ</button>
                     </div>
                 </div>
             </div>
 
             <!-- 8. Słoik Wspomnień -->
             <div class="card" id="card-memories">
-                <div class="card-header" onclick="toggleCard('card-memories')">
+                <div class="card-header" data-card="card-memories">
                     <h2>🍯 Słoik Wspomnień <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -427,14 +394,14 @@
                     </div>
                     <div>
                         <textarea id="memory-text" placeholder="Miłe wspomnienie..." style="height: 40px; resize: none;"></textarea>
-                        <button onclick="addMemory()" style="width: 100%;">WRZUĆ DO SŁOIKA</button>
+                        <button onclick="window.addMemory()" style="width: 100%;">WRZUĆ DO SŁOIKA</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 9. Kalendarz Adwentowy (Zimowy) -->
+            <!-- 9. Kalendarz Adwentowy -->
             <div class="card advent-card" id="card-advent">
-                <div class="card-header" onclick="toggleCard('card-advent')">
+                <div class="card-header" data-card="card-advent">
                     <h2>🎄 Kalendarz Adwentowy <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
@@ -445,16 +412,16 @@
                 </div>
             </div>
 
-            <!-- Nuta na dziś (Spotify zmienialne) -->
+            <!-- Nuta na dziś -->
             <div class="card spotify-full" id="card-spotify">
-                <div class="card-header" onclick="toggleCard('card-spotify')">
+                <div class="card-header" data-card="card-spotify">
                     <h2>🎵 Nuta na dziś <span class="toggle-arrow">▼</span></h2>
                 </div>
                 <div class="card-content">
                     <iframe id="spotify-iframe" style="border-radius:12px; margin-bottom: 15px;" src="" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="spotify-link-input" placeholder="Wklej link do utworu ze Spotify..." style="margin-bottom:0;">
-                        <button onclick="updateSpotifySong()">Zmień nutę</button>
+                        <button onclick="window.updateSpotifySong()">Zmień nutę</button>
                     </div>
                 </div>
             </div>
@@ -462,34 +429,62 @@
         </div>
     </div>
 
-    <!-- Logika bazy danych -->
+    <!-- Logika aplikacji i bazy danych -->
     <script type="module">
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        
-        window.initApp = function(db) {
-            // Obsługa zwijania kart z pamięcią w localStorage
-            window.toggleCard = function(cardId) {
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDIF06NUV6cXSATyYoILtdrSCyN2cc-W4",
+            authDomain: "aplikacja-27301.firebaseapp.com",
+            projectId: "aplikacja-27301",
+            storageBucket: "aplikacja-27301.firebasestorage.app",
+            messagingSenderId: "193190488932",
+            appId: "1:193190488932:web:aac273e693cc3b9a7e6871",
+            measurementId: "G-Q36E1Y3H9L"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Obsługa zwijania kart
+        document.querySelectorAll('.card-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const cardId = header.getAttribute('data-card');
                 const card = document.getElementById(cardId);
                 card.classList.toggle('collapsed');
-                const isCollapsed = card.classList.contains('collapsed');
-                localStorage.setItem(cardId + '_collapsed', isCollapsed);
-            };
-
-            // Przywracanie stanu kart przy starcie
-            document.querySelectorAll('.card').forEach(card => {
-                const id = card.id;
-                if(localStorage.getItem(id + '_collapsed') === 'true') {
-                    card.classList.add('collapsed');
-                }
+                localStorage.setItem(cardId + '_collapsed', card.classList.contains('collapsed'));
             });
+        });
 
-            // Nastroje
-            window.setMood = function(who, e) {
-                const mood = e.target.getAttribute('data-mood');
-                if(!mood) return;
-                const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                setDoc(doc(db, "moods", who), { mood, time: timeStr }, { merge: true });
+        document.querySelectorAll('.card').forEach(card => {
+            const id = card.id;
+            if (localStorage.getItem(id + '_collapsed') === 'true') {
+                card.classList.add('collapsed');
             }
+        });
+
+        signInAnonymously(auth).catch((error) => console.error("Błąd autoryzacji:", error));
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                initApp(db);
+            }
+        });
+
+        function initApp(db) {
+            // Nastroje
+            document.querySelectorAll('.mood-emojis').forEach(container => {
+                container.addEventListener('click', (e) => {
+                    const mood = e.target.getAttribute('data-mood');
+                    if (!mood) return;
+                    const who = container.getAttribute('data-who');
+                    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    setDoc(doc(db, "moods", who), { mood, time: timeStr }, { merge: true });
+                });
+            });
 
             onSnapshot(collection(db, "moods"), (snapshot) => {
                 snapshot.forEach((docSnap) => {
@@ -497,24 +492,24 @@
                     const who = docSnap.id;
                     const display = document.getElementById(`${who}-mood-display`);
                     const time = document.getElementById(`${who}-mood-time`);
-                    if(display) display.innerText = data.mood || '...';
-                    if(time) time.innerText = data.time || '';
+                    if (display) display.innerText = data.mood || '...';
+                    if (time) time.innerText = data.time || '';
                 });
             });
 
             // Skargi
             window.addComplaint = function() {
                 const text = document.getElementById('complaint-text').value;
-                if(!text) return;
+                if (!text) return;
                 addDoc(collection(db, "complaints"), { text, timestamp: Date.now() });
                 document.getElementById('complaint-text').value = '';
-            }
+            };
 
             onSnapshot(collection(db, "complaints"), (snapshot) => {
                 let html = "";
                 snapshot.forEach((docSnap) => {
                     let d = docSnap.data();
-                    html += `<div class="list-item"><span>${d.text}</span> <button class="delete-btn" onclick="removeItem('complaints', '${docSnap.id}')">🗑️</button></div>`;
+                    html += `<div class="list-item"><span>${d.text}</span> <button class="delete-btn" onclick="window.removeItem('complaints', '${docSnap.id}')">🗑️</button></div>`;
                 });
                 document.getElementById('complaints-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak pism.</div>';
             });
@@ -522,10 +517,10 @@
             // Życzenia
             window.addWish = function(who) {
                 const input = document.getElementById(`wish-${who}`);
-                if(!input.value) return;
+                if (!input.value) return;
                 addDoc(collection(db, "wishes"), { who, text: input.value, checked: false, timestamp: Date.now() });
                 input.value = '';
-            }
+            };
 
             onSnapshot(collection(db, "wishes"), (snapshot) => {
                 let htmlJusia = "";
@@ -533,10 +528,10 @@
                 snapshot.forEach((docSnap) => {
                     let d = docSnap.data();
                     let itemHtml = `<div class="list-item ${d.checked ? 'checked' : ''}">
-                        <label style="cursor:pointer;"><input type="checkbox" ${d.checked ? 'checked' : ''} onclick="toggleCheck('wishes', '${docSnap.id}', ${!d.checked})"> <span>${d.text}</span></label>
-                        <button class="delete-btn" onclick="removeItem('wishes', '${docSnap.id}')">🗑️</button>
+                        <label style="cursor:pointer;"><input type="checkbox" ${d.checked ? 'checked' : ''} onclick="window.toggleCheck('wishes', '${docSnap.id}', this.checked)"> <span>${d.text}</span></label>
+                        <button class="delete-btn" onclick="window.removeItem('wishes', '${docSnap.id}')">🗑️</button>
                     </div>`;
-                    if(d.who === 'jusia') htmlJusia += itemHtml;
+                    if (d.who === 'jusia') htmlJusia += itemHtml;
                     else htmlKrzys += itemHtml;
                 });
                 document.getElementById('list-wish-jusia').innerHTML = htmlJusia || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>';
@@ -547,15 +542,15 @@
             window.addDateIdea = function() {
                 const title = document.getElementById('date-title').value;
                 const time = document.getElementById('date-time').value;
-                if(!title) return;
+                if (!title) return;
                 addDoc(collection(db, "dates"), { title, time, status: "Oczekuje na akceptację ⏳", timestamp: Date.now() });
                 document.getElementById('date-title').value = '';
                 document.getElementById('date-time').value = '';
-            }
+            };
 
             window.updateDateStatus = function(id, status) {
                 updateDoc(doc(db, "dates", id), { status });
-            }
+            };
 
             onSnapshot(collection(db, "dates"), (snapshot) => {
                 let html = "";
@@ -566,11 +561,155 @@
                         <div style="font-size: 0.75rem; font-style: italic;">Status: ${d.status}</div>
                         <div style="display:flex; gap:6px; margin-top:2px; width: 100%; justify-content: space-between;">
                             <div>
-                                <button style="padding: 2px 6px; font-size:0.7rem;" onclick="updateDateStatus('${docSnap.id}', 'Zaakceptowane! 💖')">Akceptuj</button>
-                                <button style="padding: 2px 6px; font-size:0.7rem; background:#777;" onclick="updateDateStatus('${docSnap.id}', 'Odrzucone ❌')">Odrzuć</button>
+                                <button style="padding: 2px 6px; font-size:0.7rem;" onclick="window.updateDateStatus('${docSnap.id}', 'Zaakceptowane! 💖')">Akceptuj</button>
+                                <button style="padding: 2px 6px; font-size:0.7rem; background:#777;" onclick="window.updateDateStatus('${docSnap.id}', 'Odrzucone ❌')">Odrzuć</button>
                             </div>
-                            <button class="delete-btn" onclick="removeItem('dates', '${docSnap.id}')">🗑️</button>
+                            <button class="delete-btn" onclick="window.removeItem('dates', '${docSnap.id}')">🗑️</button>
                         </div>
                     </div>`;
                 });
-                document.getElementById('dates-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #
+                document.getElementById('dates-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak propozycji...</div>';
+            });
+
+            // Prośby
+            window.addRequest = function() {
+                const text = document.getElementById('request-text').value;
+                if (!text) return;
+                addDoc(collection(db, "requests"), { text, checked: false, timestamp: Date.now() });
+                document.getElementById('request-text').value = '';
+            };
+
+            onSnapshot(collection(db, "requests"), (snapshot) => {
+                let html = "";
+                snapshot.forEach((docSnap) => {
+                    let d = docSnap.data();
+                    html += `<div class="list-item ${d.checked ? 'checked' : ''}">
+                        <label style="cursor:pointer;"><input type="checkbox" ${d.checked ? 'checked' : ''} onclick="window.toggleCheck('requests', '${docSnap.id}', this.checked)"> <span>${d.text}</span></label>
+                        <button class="delete-btn" onclick="window.removeItem('requests', '${docSnap.id}')">🗑️</button>
+                    </div>`;
+                });
+                document.getElementById('requests-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Pusto...</div>';
+            });
+
+            // Filmy
+            window.addMovie = function() {
+                const title = document.getElementById('movie-title').value;
+                if (!title) return;
+                addDoc(collection(db, "movies"), { title, checked: false, timestamp: Date.now() });
+                document.getElementById('movie-title').value = '';
+            };
+
+            onSnapshot(collection(db, "movies"), (snapshot) => {
+                let html = "";
+                snapshot.forEach((docSnap) => {
+                    let d = docSnap.data();
+                    html += `<div class="list-item ${d.checked ? 'checked' : ''}">
+                        <label style="cursor:pointer;"><input type="checkbox" ${d.checked ? 'checked' : ''} onclick="window.toggleCheck('movies', '${docSnap.id}', this.checked)"> <span>${d.title}</span></label>
+                        <button class="delete-btn" onclick="window.removeItem('movies', '${docSnap.id}')">🗑️</button>
+                    </div>`;
+                });
+                document.getElementById('movies-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Brak filmów...</div>';
+            });
+
+            // Słoik wspomnień
+            window.addMemory = function() {
+                const text = document.getElementById('memory-text').value;
+                if (!text) return;
+                addDoc(collection(db, "memories"), { text, timestamp: Date.now() });
+                document.getElementById('memory-text').value = '';
+            };
+
+            onSnapshot(collection(db, "memories"), (snapshot) => {
+                let html = "";
+                snapshot.forEach((docSnap) => {
+                    let d = docSnap.data();
+                    html += `<div class="list-item"><span>💌 ${d.text}</span> <button class="delete-btn" onclick="window.removeItem('memories', '${docSnap.id}')">🗑️</button></div>`;
+                });
+                document.getElementById('memories-list').innerHTML = html || '<div style="text-align: center; font-style: italic; color: #888; font-size: 0.85rem;">Słoik jest pusty...</div>';
+            });
+
+            // Spotify
+            window.updateSpotifySong = function() {
+                const inputVal = document.getElementById('spotify-link-input').value;
+                let trackId = "4cOdK2wGLETKBW3PvgPWqT";
+                const match = inputVal.match(/track\/([a-zA-Z0-9]+)/);
+                if (match && match[1]) {
+                    trackId = match[1];
+                }
+                setDoc(doc(db, "settings", "spotify"), { trackId }, { merge: true });
+                document.getElementById('spotify-link-input').value = '';
+            };
+
+            onSnapshot(doc(db, "settings", "spotify"), (docSnap) => {
+                let trackId = "4cOdK2wGLETKBW3PvgPWqT";
+                if (docSnap.exists() && docSnap.data().trackId) {
+                    trackId = docSnap.data().trackId;
+                }
+                document.getElementById('spotify-iframe').src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator`;
+            });
+
+            // Kalendarz Adwentowy
+            const adventSurprises = {
+                1: "Dziś czeka na Ciebie gorąca czekolada i buziak! ☕",
+                2: "Wspólny wybór filmu na wieczór i przytulaski 🎬",
+                3: "Mała słodka niespodzianka w kieszeni kurtki 🍫",
+                4: "Wieczór bez telefonów – tylko my i rozmowy ✨",
+                5: "Krzysiu/Jusia stawia dziś ulubioną kawę! ☕",
+                6: "Mikołajkowe podarunki i mnóstwo miłości ❤️",
+                7: "Masz prawo do jednego zwolnienia z domowego obowiązku! 👑",
+                8: "Wspólne planowanie zimowego wypadu ❄️",
+                9: "Długie, niedzielne przytulanie bez limitu 🥰",
+                10: "Masaż pleców wieczorem na rozluźnienie 💆‍♀️",
+                11: "Słodkie liściki ukryte w różnych miejscach 💌",
+                12: "Jesteśmy już w połowie drogi do Świąt! Oglądamy świąteczne komedie 🎄",
+                13: "Dziś Ty wybierasz obiad lub deser! 🥞",
+                14: "Romantyczny spacer w zimowej scenerii ❄️",
+                15: "Gorąca kąpiel i relaks przy świecach 🕯️",
+                16: "Wspólne pieczenie pierniczków lub ciasteczek 🍪",
+                17: "Wieczorne opowiadanie najlepszych wspomnień 🌟",
+                18: "Mały upominek od serca 🎁",
+                19: "Zrobienie ulubionej herbaty drugiej połówce 🫖",
+                20: "Słuchanie świątecznych piosenek i leniuchowanie 🎶",
+                21: "Zimowy wieczór pod kocem z filmem 🧸",
+                22: "Ostatnie przygotowania i ekscytacja przedświąteczna ✨",
+                23: "Magiczny czas tuż przed Wigilią 🎄",
+                24: "Wesołych Świąt! Najpiękniejszy prezent to my razem ❤️"
+            };
+
+            const grid = document.getElementById('advent-grid');
+            let adventHtml = "";
+            for (let i = 1; i <= 24; i++) {
+                adventHtml += `<div class="advent-box" onclick="window.openAdvent(${i})">${i}</div>`;
+            }
+            grid.innerHTML = adventHtml;
+
+            window.openAdvent = function(day) {
+                const now = new Date();
+                const currentMonth = now.getMonth() + 1;
+                const currentDay = now.getDate();
+
+                if (currentMonth < 12) {
+                    alert("Cierpliwości! Kalendarz adwentowy otworzy się dopiero 1 grudnia! 🎄");
+                    return;
+                }
+                if (currentMonth === 12 && currentDay < day) {
+                    alert(`Na dzień ${day} grudnia musisz jeszcze chwilę poczekać! ⏳`);
+                    return;
+                }
+
+                const msg = adventSurprises[day] || "Wspaniałego dnia pełnego miłości! ❤️";
+                alert(`Okienko nr ${day}:\n\n${msg}`);
+            };
+
+            // Globalne funkcje pomocnicze
+            window.removeItem = function(coll, id) {
+                deleteDoc(doc(db, coll, id));
+            };
+
+            window.toggleCheck = function(coll, id, val) {
+                updateDoc(doc(db, coll, id), { checked: val });
+            };
+        }
+    </script>
+</body>
+</html>
